@@ -1,0 +1,15 @@
+{
+  "name": "realitio-script",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@realitio/realitio-lib": "^1.0.2",
+    "web3": "1.0.0-beta.36",
+    "webpack": "^4.19.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.0.4"
+  }
+}
