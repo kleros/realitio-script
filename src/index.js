@@ -51,17 +51,6 @@ const getRulingOptions = async () => {
     }
   )
 
-  const answers = await realitioContractInstance.getPastEvents(
-    'LogNewAnswer',
-    {
-      filter: {
-        question_id: realitioID
-      },
-      fromBlock: fromBlock,
-      toBlock: 'latest'
-    }
-  )
-
   const templateText = templateEventLog[0].returnValues.question_text;
   const questionData = rc_question.populatedJSONForTemplate(templateText, questionEventLog[0].returnValues.question)
 
