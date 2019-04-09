@@ -67,41 +67,40 @@ const getRulingOptions = async () => {
 
   switch (questionData.type) {
     case 'bool':
-      scriptResolver({
-        category: questionData.category,
+      resolveScript({
         rulingOptions: {
           type: 'single',
           titles: questionData.outcomes
         }
       })
     case 'uint':
-      scriptResolver({
+      resolveScript({
         rulingOptions: {
           type: 'int'
         }
       })
     case 'single-select':
-      scriptResolver({
+      resolveScript({
         rulingOptions: {
           type: 'single',
           titles: questionData.outcomes
         }
       })
     case 'multiple-select':
-      scriptResolver({
+      resolveScript({
         rulingOptions: {
           type: 'multiple',
           titles: questionData.outcomes
         }
       })
     case 'datetime':
-      scriptResolver({
+      resolveScript({
         rulingOptions: {
           type: 'datetime'
         }
       })
     default:
-      scriptResolver({})
+      resolveScript({})
   }
 }
 
