@@ -6,8 +6,8 @@ const _realitioContract = require('../assets/realitio.json')
 
 // FILL THESE IN FOR THE NETWORK
 const web3URI = 'https://mainnet.infura.io/v3/668b3268d5b241b5bab5c6cb886e4c61'
-const realitioProxyContractAddress = '0x57adb6aa9edaa9abfd495b519d94d08f47321e26'
-const realitioContractAddress = '0x325a2e0F3CCA2ddbaeBB4DfC38Df8D19ca165b47'
+const realitioProxyContractAddress = '0x126697B552B83F08C7EBEBAe8D13EAE2871e4E1E'
+const realitioContractAddress = '0x3d3b51b1091d1f6491aeb1916c94bafe57f6cc9d'
 // Can add this for speed
 const fromBlock = 6531265
 

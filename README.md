@@ -16,7 +16,7 @@ Proxy: 0xA6EAd513D05347138184324392d8ceb24C116118
 Realitio: 0x50E35A1ED424aB9C0B8C7095b3d9eC2fb791A168
 Block: 10350865
 
-MainNet: https://ipfs.kleros.io/ipfs/QmUiycybNc3KeQfAdNnGznyzgSPPN8KDtV66e9iK31FXiW
-Proxy: 0x57adb6aa9edaa9abfd495b519d94d08f47321e26
+MainNet: https://ipfs.kleros.io/ipfs/QmNhs2mo7t8pydn7gg6ycrtT4mhfvhARLEoyMYgs9SDkH2
+Proxy: 0xd47f72a2d1d0e91b0ec5e5f5d02b2dc26d00a14d
 Realitio: 0x325a2e0F3CCA2ddbaeBB4DfC38Df8D19ca165b47
 Block: 6531265
