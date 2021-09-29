@@ -66,34 +66,49 @@ const getMetaEvidence = async () => {
       resolveScript({
         rulingOptions: {
           type: 'single-select',
-          titles: ["No", "Yes"]
+          titles: ["No", "Yes"],
+          reserved:{
+            '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF': 'Answered Too Soon'
+          }
         }
       })
     case 'uint':
       resolveScript({
         rulingOptions: {
           type: 'uint',
-          precision: questionData["decimals"]
+          precision: questionData["decimals"],
+          reserved:{
+            '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF': 'Answered Too Soon'
+          }
         }
       })
     case 'single-select':
       resolveScript({
         rulingOptions: {
           type: 'single-select',
-          titles: questionData.outcomes
+          titles: questionData.outcomes,
+          reserved:{
+            '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF': 'Answered Too Soon'
+          }
         }
       })
     case 'multiple-select':
       resolveScript({
         rulingOptions: {
           type: 'multiple-select',
-          titles: questionData.outcomes
+          titles: questionData.outcomes,
+          reserved:{
+            '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF': 'Answered Too Soon'
+          }
         }
       })
     case 'datetime':
       resolveScript({
         rulingOptions: {
-          type: 'datetime'
+          type: 'datetime',
+          reserved:{
+            '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF': 'Answered Too Soon'
+          }
         }
       })
     default:
