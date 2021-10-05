@@ -7,16 +7,14 @@ const _realitioContract = require("./assets/realitio.json");
 const fromBlock = 6531265;
 
 const getMetaEvidence = async () => {
-  const { arbitrableContractAddress, arbitrableJsonRpcUrl, arbitratorJsonRpcUrl } = scriptParameters;
-  console.log(scriptParameters);
-  const web3 = new Web3(arbitratorJsonRpcUrl || arbitrableJsonRpcUrl);
-  console.log("im alive");
+  const { arbitrableContractAddress, arbitrableJsonRpcUrl, arbitratorJsonRpcUrl, jsonRpcUrl } = scriptParameters;
+  console.debug(scriptParameters);
+  const web3 = new Web3(arbitratorJsonRpcUrl || arbitrableJsonRpcUrl || jsonRpcUrl);
   const proxyContractInstance = new web3.eth.Contract(_realitioProxy.abi, arbitrableContractAddress);
 
-  const realitioContractAddress = await proxyContractInstance.realitio();
+  const realitioContractAddress = await proxyContractInstance.methods.realitio().call();
 
   const realitioContractInstance = new web3.eth.Contract(_realitioContract, realitioContractAddress);
-  console.log(realitioContractInstance);
 
   const realitioIDEventLog = await proxyContractInstance.getPastEvents("DisputeIDToQuestionID", {
     filter: {
