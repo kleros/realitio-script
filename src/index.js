@@ -1,119 +1,104 @@
-const Web3 = require('web3')
-const rc_question = require('@realitio/realitio-lib/formatters/question.js');
-const rc_template = require('@realitio/realitio-lib/formatters/template.js');
-const _realitioProxy = require('../assets/realitio-proxy.json')
-const _realitioContract = require('../assets/realitio.json')
+const Web3 = require("web3");
+const rc_question = require("@reality.eth/reality-eth-lib/formatters/question.js");
+const rc_template = require("@reality.eth/reality-eth-lib/formatters/template.js");
+const _realitioProxy = require("./assets/realitio-proxy.json");
+const _realitioContract = require("./assets/realitio.json");
 
-// FILL THESE IN FOR THE NETWORK
-const web3URI = ''
-const realitioProxyContractAddress = ''
-const realitioContractAddress = ''
-// Can add this for speed
-const fromBlock = 6531265
+const fromBlock = 6531265;
 
 const getMetaEvidence = async () => {
-  const web3 = new Web3(web3URI)
+  const { arbitrableContractAddress, arbitrableJsonRpcUrl, arbitratorJsonRpcUrl } = scriptParameters;
+  console.log(scriptParameters);
+  const web3 = new Web3(arbitratorJsonRpcUrl || arbitrableJsonRpcUrl);
+  console.log("im alive");
+  const proxyContractInstance = new web3.eth.Contract(_realitioProxy.abi, arbitrableContractAddress);
 
-  const proxyContractInstance = new web3.eth.Contract(
-    _realitioProxy.abi,
-    realitioProxyContractAddress
-  )
+  const realitioContractAddress = await proxyContractInstance.realitio();
 
-  const realitioContractInstance = new web3.eth.Contract(
-    _realitioContract.abi,
-    realitioContractAddress
-  )
+  const realitioContractInstance = new web3.eth.Contract(_realitioContract, realitioContractAddress);
+  console.log(realitioContractInstance);
 
-  const realitioIDEventLog = await proxyContractInstance.getPastEvents(
-    'DisputeIDToQuestionID',
-    {
-      filter: {
-        _disputeID: scriptParameters.disputeID
-      },
-      fromBlock: fromBlock,
-      toBlock: 'latest'
-    }
-  )
-  const realitioID = realitioIDEventLog[0].returnValues._questionID
+  const realitioIDEventLog = await proxyContractInstance.getPastEvents("DisputeIDToQuestionID", {
+    filter: {
+      _disputeID: scriptParameters.disputeID,
+    },
+    fromBlock: fromBlock,
+    toBlock: "latest",
+  });
+  const realitioID = realitioIDEventLog[0].returnValues._questionID;
 
-  const questionEventLog = await realitioContractInstance.getPastEvents(
-    'LogNewQuestion',
-    {
-      filter: {
-        question_id: realitioID
-      },
-      fromBlock: fromBlock,
-      toBlock: 'latest'
-    }
-  )
-  const templateID = questionEventLog[0].returnValues.template_id
+  const questionEventLog = await realitioContractInstance.getPastEvents("LogNewQuestion", {
+    filter: {
+      question_id: realitioID,
+    },
+    fromBlock: fromBlock,
+    toBlock: "latest",
+  });
+  const templateID = questionEventLog[0].returnValues.template_id;
 
-  const templateEventLog = await realitioContractInstance.getPastEvents(
-    'LogNewTemplate',
-    {
-      filter: {
-        template_id: templateID
-      },
-      fromBlock: fromBlock,
-      toBlock: 'latest'
-    }
-  )
+  const templateEventLog = await realitioContractInstance.getPastEvents("LogNewTemplate", {
+    filter: {
+      template_id: templateID,
+    },
+    fromBlock: fromBlock,
+    toBlock: "latest",
+  });
   const templateText = templateEventLog[0].returnValues.question_text;
-  const questionData = rc_question.populatedJSONForTemplate(templateText, questionEventLog[0].returnValues.question)
+  const questionData = rc_question.populatedJSONForTemplate(templateText, questionEventLog[0].returnValues.question);
 
   switch (questionData.type) {
-    case 'bool':
+    case "bool":
       resolveScript({
         rulingOptions: {
-          type: 'single-select',
+          type: "single-select",
           titles: ["No", "Yes"],
-          reserved:{
-            '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF': 'Answered Too Soon'
-          }
-        }
-      })
-    case 'uint':
+          reserved: {
+            "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF": "Answered Too Soon",
+          },
+        },
+      });
+    case "uint":
       resolveScript({
         rulingOptions: {
-          type: 'uint',
+          type: "uint",
           precision: questionData["decimals"],
-          reserved:{
-            '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF': 'Answered Too Soon'
-          }
-        }
-      })
-    case 'single-select':
+          reserved: {
+            "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF": "Answered Too Soon",
+          },
+        },
+      });
+    case "single-select":
       resolveScript({
         rulingOptions: {
-          type: 'single-select',
+          type: "single-select",
           titles: questionData.outcomes,
-          reserved:{
-            '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF': 'Answered Too Soon'
-          }
-        }
-      })
-    case 'multiple-select':
+          reserved: {
+            "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF": "Answered Too Soon",
+          },
+        },
+      });
+    case "multiple-select":
       resolveScript({
         rulingOptions: {
-          type: 'multiple-select',
+          type: "multiple-select",
           titles: questionData.outcomes,
-          reserved:{
-            '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF': 'Answered Too Soon'
-          }
-        }
-      })
-    case 'datetime':
+          reserved: {
+            "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF": "Answered Too Soon",
+          },
+        },
+      });
+    case "datetime":
       resolveScript({
         rulingOptions: {
-          type: 'datetime',
-          reserved:{
-            '0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF': 'Answered Too Soon'
-          }
-        }
-      })
+          type: "datetime",
+          reserved: {
+            "0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF": "Answered Too Soon",
+          },
+        },
+      });
     default:
-      resolveScript({})
+      resolveScript({});
   }
-}
+};
 
-module.exports = getMetaEvidence
+module.exports = getMetaEvidence;

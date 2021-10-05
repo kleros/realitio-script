@@ -4,5 +4,8 @@ module.exports = {
     filename: 'bundle.js',
     libraryTarget: 'var',
     library: 'getMetaEvidence'
-  }
+  },
+     optimization: {
+        minimize: true
+    }
 };
